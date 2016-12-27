@@ -1514,6 +1514,8 @@ var getMouseTarget = this.getMouseTarget = function(evt) {
 		if (!started) {return;}
 		if (evt.button === 1 || canvas.spaceKey) {return;}
 
+        root_sctm = $('#svgcontent g')[0].getScreenCTM().inverse();
+
 		var i, xya, c, cx, cy, dx, dy, len, angle, box,
 			selected = selectedElements[0],
 			pt = svgedit.math.transformPoint( evt.pageX, evt.pageY, root_sctm ),
@@ -3414,6 +3416,11 @@ pathActions = canvas.pathActions = function() {
                         cy: this.cy.baseVal.value / that.last_known_zoom * current_zoom,
                     });
                 });
+                var stretchy = svgedit.utilities.getElem('path_stretch_line');
+                var path = svgedit.utilities.getPathDFromElement(stretchy).split(' ');
+                path[1] = path[1] / that.last_known_zoom * current_zoom;
+                path[2] = path[2] / that.last_known_zoom * current_zoom;
+                $(stretchy).attr('d', path.join(' '));
             }
             this.last_known_zoom = current_zoom;
 		},
