@@ -2326,9 +2326,7 @@ var getMouseTarget = this.getMouseTarget = function(evt) {
 		if (!delta) {return;}
 
 		bbox.factor = Math.max(3/4, Math.min(4/3, (delta)));
-
-		var current_zoom = svgCanvas.getZoom();
-
+	
 		call('zoomed', bbox);
 
         var root_sctm2 = $('#svgcontent g')[0].getScreenCTM().inverse();
@@ -3417,10 +3415,12 @@ pathActions = canvas.pathActions = function() {
                     });
                 });
                 var stretchy = svgedit.utilities.getElem('path_stretch_line');
-                var path = svgedit.utilities.getPathDFromElement(stretchy).split(' ');
-                path[1] = path[1] / that.last_known_zoom * current_zoom;
-                path[2] = path[2] / that.last_known_zoom * current_zoom;
-                $(stretchy).attr('d', path.join(' '));
+                if (stretchy) {
+                    var path = svgedit.utilities.getPathDFromElement(stretchy).split(' ');
+                    path[1] = path[1] / that.last_known_zoom * current_zoom;
+                    path[2] = path[2] / that.last_known_zoom * current_zoom;
+                    $(stretchy).attr('d', path.join(' '));
+                }
             }
             this.last_known_zoom = current_zoom;
 		},
